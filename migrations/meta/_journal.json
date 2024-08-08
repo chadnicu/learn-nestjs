@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1722926391443,
+      "tag": "0000_vengeful_cammi",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1722927835120,
+      "tag": "0001_elite_calypso",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1723018785266,
+      "tag": "0002_amusing_human_robot",
+      "breakpoints": true
+    }
+  ]
+}
