@@ -8,15 +8,16 @@ import {
   Post,
 } from '@nestjs/common';
 import { TemplatesService } from './templates.service';
-import { CreateTemplateDto } from 'src/dto/templates/create-template.dto';
-import { UpdateTemplateDto } from 'src/dto/templates/update-template.dto';
+import { CreateTemplateDto, UpdateTemplateDto } from './dto';
+import { StringIdParamDto } from 'src/common/string-id-param.dto';
+import { NumberIdParamDto } from 'src/common/number-id-param.dto';
 
 @Controller('templates')
 export class TemplatesController {
   constructor(private readonly templatesService: TemplatesService) {}
 
   @Get('/user/:id')
-  async findAllByUser(@Param('id') userId: string) {
+  async findAllByUser(@Param() { id: userId }: StringIdParamDto) {
     return await this.templatesService.findAllByUser(userId);
   }
 
@@ -26,12 +27,15 @@ export class TemplatesController {
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {
-    await this.templatesService.delete(+id);
+  async delete(@Param() { id }: NumberIdParamDto) {
+    await this.templatesService.delete(id);
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() body: UpdateTemplateDto) {
-    await this.templatesService.update(+id, body);
+  async update(
+    @Param() { id }: NumberIdParamDto,
+    @Body() body: UpdateTemplateDto,
+  ) {
+    await this.templatesService.update(id, body);
   }
 }

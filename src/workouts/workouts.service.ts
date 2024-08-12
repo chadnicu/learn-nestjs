@@ -1,9 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { Database, DrizzleAsyncProvider } from 'src/db/db.module';
-import { workoutTable } from 'src/db/schema';
-import { CreateWorkoutDto } from 'src/dto/workouts/create-workout.dto';
-import { UpdateWorkoutDto } from 'src/dto/workouts/update-workout.dto';
+import { workoutExerciseTable, workoutTable } from 'src/db/schema';
+import {
+  CreateWorkoutDto,
+  UpdateWorkoutDto,
+  UpdateWorkoutExerciseDto,
+} from './dto';
 
 @Injectable()
 export class WorkoutsService {
@@ -26,5 +29,38 @@ export class WorkoutsService {
 
   async update(id: number, data: UpdateWorkoutDto) {
     await this.db.update(workoutTable).set(data).where(eq(workoutTable.id, id));
+  }
+
+  async addExercise(
+    workoutId: number,
+    exerciseId: number,
+    body: UpdateWorkoutExerciseDto,
+  ) {
+    await this.db
+      .insert(workoutExerciseTable)
+      .values({ workoutId, exerciseId, ...body });
+  }
+
+  async getExercises(workoutId: number) {
+    return await this.db
+      .select()
+      .from(workoutExerciseTable)
+      .where(eq(workoutExerciseTable.workoutId, workoutId));
+  }
+
+  async updateExercise(
+    workoutExerciseId: number,
+    body: UpdateWorkoutExerciseDto,
+  ) {
+    await this.db
+      .update(workoutExerciseTable)
+      .set(body)
+      .where(eq(workoutExerciseTable.id, workoutExerciseId));
+  }
+
+  async removeExercise(workoutExerciseId: number) {
+    await this.db
+      .delete(workoutExerciseTable)
+      .where(eq(workoutExerciseTable.id, workoutExerciseId));
   }
 }

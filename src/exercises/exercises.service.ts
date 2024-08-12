@@ -2,8 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { Database, DrizzleAsyncProvider } from 'src/db/db.module';
 import { exerciseTable } from 'src/db/schema';
-import { CreateExerciseDto } from 'src/dto/exercises/create-exericse.dto';
-import { UpdateExerciseDto } from 'src/dto/exercises/update-exercise.dto';
+import { CreateExerciseDto, UpdateExerciseDto } from './dto';
 
 @Injectable()
 export class ExercisesService {

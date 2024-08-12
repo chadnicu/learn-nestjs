@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 export const exerciseTable = sqliteTable('exercise', {
   id: integer('id').primaryKey(),
@@ -21,10 +21,12 @@ export const templateExerciseTable = sqliteTable('template_exercise', {
   toDo: text('todo'),
   exerciseId: integer('exercise_id')
     .notNull()
-    .references(() => exerciseTable.id),
+    .references(() => exerciseTable.id, { onDelete: 'cascade' })
+    .notNull(),
   templateId: integer('template_id')
     .notNull()
-    .references(() => templateTable.id),
+    .references(() => templateTable.id, { onDelete: 'cascade' })
+    .notNull(),
   order: integer('order').notNull().default(-1),
 });
 
@@ -45,11 +47,13 @@ export const workoutExerciseTable = sqliteTable('workout_exercise', {
   comment: text('comment'),
   workoutId: integer('workout_id')
     .notNull()
-    .references(() => workoutTable.id),
+    .references(() => workoutTable.id, { onDelete: 'cascade' })
+    .notNull(),
   exerciseId: integer('exercise_id')
     .notNull()
-    .references(() => exerciseTable.id),
-  order: integer('order').notNull().default(-1),
+    .references(() => exerciseTable.id, { onDelete: 'cascade' })
+    .notNull(),
+  order: real('order').notNull().default(-1),
 });
 
 export const setTable = sqliteTable('set', {
@@ -58,7 +62,8 @@ export const setTable = sqliteTable('set', {
   weight: integer('weight'),
   workoutExerciseId: integer('workout_exercise_id')
     .notNull()
-    .references(() => workoutExerciseTable.id),
+    .references(() => workoutExerciseTable.id, { onDelete: 'cascade' })
+    .notNull(),
   userId: text('user_id').notNull(),
 });
 

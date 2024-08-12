@@ -2,8 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { Database, DrizzleAsyncProvider } from 'src/db/db.module';
 import { templateTable } from 'src/db/schema';
-import { CreateTemplateDto } from 'src/dto/templates/create-template.dto';
-import { UpdateTemplateDto } from 'src/dto/templates/update-template.dto';
+import { CreateTemplateDto, UpdateTemplateDto } from './dto';
 
 @Injectable()
 export class TemplatesService {

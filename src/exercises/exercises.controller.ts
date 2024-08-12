@@ -8,15 +8,16 @@ import {
   Post,
 } from '@nestjs/common';
 import { ExercisesService } from './exercises.service';
-import { CreateExerciseDto } from 'src/dto/exercises/create-exericse.dto';
-import { UpdateExerciseDto } from 'src/dto/exercises/update-exercise.dto';
+import { CreateExerciseDto, UpdateExerciseDto } from './dto';
+import { StringIdParamDto } from 'src/common/string-id-param.dto';
+import { NumberIdParamDto } from 'src/common/number-id-param.dto';
 
 @Controller('exercises')
 export class ExercisesController {
   constructor(private readonly exercisesService: ExercisesService) {}
 
   @Get('/user/:id')
-  async findAllByUser(@Param('id') userId: string) {
+  async findAllByUser(@Param() { id: userId }: StringIdParamDto) {
     return await this.exercisesService.findAllByUser(userId);
   }
 
@@ -26,12 +27,15 @@ export class ExercisesController {
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {
-    await this.exercisesService.delete(+id);
+  async delete(@Param() { id }: NumberIdParamDto) {
+    await this.exercisesService.delete(id);
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() body: UpdateExerciseDto) {
-    await this.exercisesService.update(+id, body);
+  async update(
+    @Param() { id }: NumberIdParamDto,
+    @Body() body: UpdateExerciseDto,
+  ) {
+    await this.exercisesService.update(id, body);
   }
 }
