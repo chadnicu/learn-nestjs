@@ -15,6 +15,12 @@ export class ExercisesService {
       .where(eq(exerciseTable.userId, userId));
   }
 
+  async find(id: number) {
+    return (
+      await this.db.select().from(exerciseTable).where(eq(exerciseTable.id, id))
+    )[0];
+  }
+
   async create(data: CreateExerciseDto) {
     await this.db.insert(exerciseTable).values(data);
   }

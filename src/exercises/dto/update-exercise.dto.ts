@@ -4,7 +4,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UpdateExerciseDto extends PartialType(CreateExerciseDto) {
   @ApiPropertyOptional()
-  readonly title: string;
+  readonly title?: string;
 
   @ApiPropertyOptional()
   readonly instructions?: string;
@@ -13,5 +13,5 @@ export class UpdateExerciseDto extends PartialType(CreateExerciseDto) {
   readonly url?: string;
 
   @ApiPropertyOptional()
-  readonly userId: string;
+  readonly userId?: string;
 }

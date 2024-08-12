@@ -19,6 +19,15 @@ export class WorkoutsService {
       .where(eq(workoutTable.userId, userId));
   }
 
+  async find(id: number) {
+    return (
+      await this.db
+        .select()
+        .from(workoutTable)
+        .where(eq(workoutExerciseTable.id, id))
+    )[0];
+  }
+
   async create(data: CreateWorkoutDto) {
     await this.db.insert(workoutTable).values(data);
   }
@@ -31,6 +40,13 @@ export class WorkoutsService {
     await this.db.update(workoutTable).set(data).where(eq(workoutTable.id, id));
   }
 
+  async getExercises(workoutId: number) {
+    return await this.db
+      .select()
+      .from(workoutExerciseTable)
+      .where(eq(workoutExerciseTable.workoutId, workoutId));
+  }
+
   async addExercise(
     workoutId: number,
     exerciseId: number,
@@ -39,13 +55,6 @@ export class WorkoutsService {
     await this.db
       .insert(workoutExerciseTable)
       .values({ workoutId, exerciseId, ...body });
-  }
-
-  async getExercises(workoutId: number) {
-    return await this.db
-      .select()
-      .from(workoutExerciseTable)
-      .where(eq(workoutExerciseTable.workoutId, workoutId));
   }
 
   async updateExercise(

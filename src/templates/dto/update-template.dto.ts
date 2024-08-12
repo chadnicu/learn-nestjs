@@ -4,11 +4,11 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UpdateTemplateDto extends PartialType(CreateTemplateDto) {
   @ApiPropertyOptional()
-  readonly title: string;
+  readonly title?: string;
 
   @ApiPropertyOptional()
   readonly description?: string;
 
   @ApiPropertyOptional()
-  readonly userId: string;
+  readonly userId?: string;
 }

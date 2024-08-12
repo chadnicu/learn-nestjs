@@ -13,7 +13,7 @@ import {
   UpdateWorkoutDto,
   UpdateWorkoutExerciseDto,
 } from './dto';
-import { AddExerciseToWorkout } from './dto/add-exercise-to-workout.dto';
+import { AddExerciseToWorkoutDto } from './dto/add-exercise-to-workout.dto';
 import { NumberIdParamDto } from 'src/common/number-id-param.dto';
 import { StringIdParamDto } from 'src/common/string-id-param.dto';
 
@@ -24,6 +24,11 @@ export class WorkoutsController {
   @Get('/user/:id')
   async findAllByUser(@Param() { id: userId }: StringIdParamDto) {
     return await this.workoutsService.findAllByUser(userId);
+  }
+
+  @Get(':id')
+  async find(@Param() { id }: NumberIdParamDto) {
+    return await this.workoutsService.find(id);
   }
 
   @Post()
@@ -45,17 +50,17 @@ export class WorkoutsController {
     await this.workoutsService.update(id, body);
   }
 
-  @Post(':workoutId/exercises/:exerciseId')
-  async addExercise(
-    @Param() { workoutId, exerciseId }: AddExerciseToWorkout,
-    @Body() body: UpdateWorkoutExerciseDto,
-  ) {
-    await this.workoutsService.addExercise(workoutId, exerciseId, body);
-  }
-
   @Get(':id/exercises')
   async getExercises(@Param() { id }: NumberIdParamDto) {
     return await this.workoutsService.getExercises(id);
+  }
+
+  @Post(':workoutId/exercises/:exerciseId')
+  async addExercise(
+    @Param() { workoutId, exerciseId }: AddExerciseToWorkoutDto,
+    @Body() body: UpdateWorkoutExerciseDto,
+  ) {
+    await this.workoutsService.addExercise(workoutId, exerciseId, body);
   }
 
   @Patch('/exercises/:id')

@@ -21,6 +21,11 @@ export class ExercisesController {
     return await this.exercisesService.findAllByUser(userId);
   }
 
+  @Get(':id')
+  async find(@Param() { id }: NumberIdParamDto) {
+    return await this.exercisesService.find(id);
+  }
+
   @Post()
   async create(@Body() body: CreateExerciseDto) {
     await this.exercisesService.create(body);

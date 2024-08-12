@@ -11,6 +11,8 @@ import { TemplatesService } from './templates.service';
 import { CreateTemplateDto, UpdateTemplateDto } from './dto';
 import { StringIdParamDto } from 'src/common/string-id-param.dto';
 import { NumberIdParamDto } from 'src/common/number-id-param.dto';
+import { AddExerciseToTemplateDto } from './dto/add-exercise-to-template.dto';
+import { UpdateTemplateExerciseDto } from './dto/update-template-exercise.dto';
 
 @Controller('templates')
 export class TemplatesController {
@@ -19,6 +21,11 @@ export class TemplatesController {
   @Get('/user/:id')
   async findAllByUser(@Param() { id: userId }: StringIdParamDto) {
     return await this.templatesService.findAllByUser(userId);
+  }
+
+  @Get(':id')
+  async find(@Param() { id }: NumberIdParamDto) {
+    return await this.templatesService.find(id);
   }
 
   @Post()
@@ -37,5 +44,31 @@ export class TemplatesController {
     @Body() body: UpdateTemplateDto,
   ) {
     await this.templatesService.update(id, body);
+  }
+
+  @Get(':id/exercises')
+  async getExercises(@Param() { id }: NumberIdParamDto) {
+    return await this.templatesService.getExercises(id);
+  }
+
+  @Post(':templateId/exercises/:exerciseId')
+  async addExercise(
+    @Param() { templateId, exerciseId }: AddExerciseToTemplateDto,
+    @Body() body: UpdateTemplateExerciseDto,
+  ) {
+    await this.templatesService.addExercise(templateId, exerciseId, body);
+  }
+
+  @Patch('/exercises/:id')
+  async updateExercise(
+    @Param() { id }: NumberIdParamDto,
+    @Body() body: UpdateTemplateExerciseDto,
+  ) {
+    await this.templatesService.updateExercise(id, body);
+  }
+
+  @Delete('/exercises/:id')
+  async removeExercise(@Param() { id }: NumberIdParamDto) {
+    await this.templatesService.removeExercise(id);
   }
 }
