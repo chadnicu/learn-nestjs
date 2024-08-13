@@ -15,13 +15,12 @@ async function bootstrap() {
     .setTitle('TrainSync')
     .setDescription('Workout tracker app')
     .setVersion('1.0')
-    // .addTag('fitness')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   const theme = new SwaggerTheme();
   const options = {
     explorer: true,
-    customCss: theme.getBuffer(SwaggerThemeNameEnum.DARK),
+    customCss: theme.getBuffer(SwaggerThemeNameEnum.DRACULA),
   };
   SwaggerModule.setup('api', app, document, options);
 

@@ -1,14 +1,31 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { Database, DrizzleAsyncProvider } from 'src/db/db.module';
-
-export type User = CreateUserDto;
+import { eq } from 'drizzle-orm';
+import { userTable } from 'src/db/schema';
+import { CreateUserDto, UpdateUserDto } from './dto';
 
 @Injectable()
 export class UsersService {
   constructor(@Inject(DrizzleAsyncProvider) private db: Database) {}
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.users.find((user) => user.username === username);
+  async find(username: string) {
+    return (
+      await this.db
+        .select()
+        .from(userTable)
+        .where(eq(userTable.username, username))
+    )[0];
+  }
+
+  async create(data: CreateUserDto) {
+    await this.db.insert(userTable).values(data);
+  }
+
+  async delete(id: number) {
+    await this.db.delete(userTable).where(eq(userTable.id, id));
+  }
+
+  async update(id: number, data: UpdateUserDto) {
+    await this.db.update(userTable).set(data).where(eq(userTable.id, id));
   }
 }
