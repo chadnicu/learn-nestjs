@@ -5,6 +5,8 @@ import { ExercisesModule } from './exercises/exercises.module';
 // import { ConfigModule } from '@nestjs/config';
 import { WorkoutsModule } from './workouts/workouts.module';
 import { TemplatesModule } from './templates/templates.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 // import * as Joi from 'joi';
 
 @Module({
@@ -12,6 +14,8 @@ import { TemplatesModule } from './templates/templates.module';
     ExercisesModule,
     WorkoutsModule,
     TemplatesModule,
+    AuthModule,
+    UsersModule,
     // ConfigModule.forRoot({
     //   validationSchema: Joi.object({
     //     POSTGRES_HOST: Joi.string().required(),

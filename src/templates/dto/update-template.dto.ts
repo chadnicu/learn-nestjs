@@ -10,5 +10,5 @@ export class UpdateTemplateDto extends PartialType(CreateTemplateDto) {
   readonly description?: string;
 
   @ApiPropertyOptional()
-  readonly userId?: string;
+  readonly userId?: number;
 }

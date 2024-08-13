@@ -33,5 +33,5 @@ export class CreateWorkoutDto {
 
   @IsString()
   @ApiProperty()
-  readonly userId: string;
+  readonly userId: number;
 }

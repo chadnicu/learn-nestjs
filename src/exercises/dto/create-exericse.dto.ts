@@ -18,5 +18,5 @@ export class CreateExerciseDto {
 
   @IsString()
   @ApiProperty()
-  readonly userId: string;
+  readonly userId: number;
 }

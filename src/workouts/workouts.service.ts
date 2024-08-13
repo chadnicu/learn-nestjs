@@ -12,7 +12,7 @@ import {
 export class WorkoutsService {
   constructor(@Inject(DrizzleAsyncProvider) private db: Database) {}
 
-  async findAllByUser(userId: string) {
+  async findAllByUser(userId: number) {
     return await this.db
       .select()
       .from(workoutTable)

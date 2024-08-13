@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { TemplatesService } from './templates.service';
 import { CreateTemplateDto, UpdateTemplateDto } from './dto';
-import { StringIdParamDto } from 'src/common/string-id-param.dto';
 import { NumberIdParamDto } from 'src/common/number-id-param.dto';
 import { AddExerciseToTemplateDto } from './dto/add-exercise-to-template.dto';
 import { UpdateTemplateExerciseDto } from './dto/update-template-exercise.dto';
@@ -19,7 +18,7 @@ export class TemplatesController {
   constructor(private readonly templatesService: TemplatesService) {}
 
   @Get('/user/:id')
-  async findAllByUser(@Param() { id: userId }: StringIdParamDto) {
+  async findAllByUser(@Param() { id: userId }: NumberIdParamDto) {
     return await this.templatesService.findAllByUser(userId);
   }
 

@@ -9,7 +9,7 @@ import { UpdateTemplateExerciseDto } from './dto/update-template-exercise.dto';
 export class TemplatesService {
   constructor(@Inject(DrizzleAsyncProvider) private db: Database) {}
 
-  async findAllByUser(userId: string) {
+  async findAllByUser(userId: number) {
     return await this.db
       .select()
       .from(templateTable)

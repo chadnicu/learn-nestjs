@@ -13,5 +13,5 @@ export class UpdateExerciseDto extends PartialType(CreateExerciseDto) {
   readonly url?: string;
 
   @ApiPropertyOptional()
-  readonly userId?: string;
+  readonly userId?: number;
 }

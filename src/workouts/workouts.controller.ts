@@ -15,14 +15,13 @@ import {
 } from './dto';
 import { AddExerciseToWorkoutDto } from './dto/add-exercise-to-workout.dto';
 import { NumberIdParamDto } from 'src/common/number-id-param.dto';
-import { StringIdParamDto } from 'src/common/string-id-param.dto';
 
 @Controller('workouts')
 export class WorkoutsController {
   constructor(private readonly workoutsService: WorkoutsService) {}
 
   @Get('/user/:id')
-  async findAllByUser(@Param() { id: userId }: StringIdParamDto) {
+  async findAllByUser(@Param() { id: userId }: NumberIdParamDto) {
     return await this.workoutsService.findAllByUser(userId);
   }
 

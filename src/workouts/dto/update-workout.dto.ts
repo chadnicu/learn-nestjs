@@ -22,5 +22,5 @@ export class UpdateWorkoutDto extends PartialType(CreateWorkoutDto) {
   comment?: string;
 
   @ApiPropertyOptional()
-  userId?: string;
+  userId?: number;
 }

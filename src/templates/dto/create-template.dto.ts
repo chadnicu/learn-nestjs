@@ -13,5 +13,5 @@ export class CreateTemplateDto {
 
   @IsString()
   @ApiProperty()
-  readonly userId: string;
+  readonly userId: number;
 }

@@ -1,19 +1,40 @@
 import { sql } from 'drizzle-orm';
 import { integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
+export const userTable = sqliteTable('user', {
+  id: integer('id').primaryKey(),
+  username: text('username').notNull().unique(),
+  email: text('email').notNull().unique(),
+  passwordHash: text('password_hash').notNull(),
+  passwordSalt: text('password_salt').notNull(),
+  firstName: text('first_name'),
+  lastName: text('last_name'),
+  dateOfBirth: text('date_of_birth'),
+  createdAt: integer('created_at', { mode: 'number' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: integer('updated_at', { mode: 'number' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
 export const exerciseTable = sqliteTable('exercise', {
   id: integer('id').primaryKey(),
   title: text('title').notNull(),
   instructions: text('instructions'),
   url: text('url'),
-  userId: text('user_id').notNull(),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => userTable.id, { onDelete: 'cascade' }),
 });
 
 export const templateTable = sqliteTable('template', {
   id: integer('id').primaryKey(),
   title: text('title').notNull(),
   description: text('description'),
-  userId: text('user_id').notNull(),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => userTable.id, { onDelete: 'cascade' }),
 });
 
 export const templateExerciseTable = sqliteTable('template_exercise', {
@@ -21,10 +42,8 @@ export const templateExerciseTable = sqliteTable('template_exercise', {
   toDo: text('todo'),
   exerciseId: integer('exercise_id')
     .notNull()
-    .references(() => exerciseTable.id, { onDelete: 'cascade' })
-    .notNull(),
+    .references(() => exerciseTable.id, { onDelete: 'cascade' }),
   templateId: integer('template_id')
-    .notNull()
     .references(() => templateTable.id, { onDelete: 'cascade' })
     .notNull(),
   order: integer('order').notNull().default(-1),
@@ -38,7 +57,9 @@ export const workoutTable = sqliteTable('workout', {
   started: text('started'),
   finished: text('finished'),
   comment: text('comment'),
-  userId: text('user_id').notNull(),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => userTable.id, { onDelete: 'cascade' }),
 });
 
 export const workoutExerciseTable = sqliteTable('workout_exercise', {
@@ -46,11 +67,9 @@ export const workoutExerciseTable = sqliteTable('workout_exercise', {
   toDo: text('todo'),
   comment: text('comment'),
   workoutId: integer('workout_id')
-    .notNull()
     .references(() => workoutTable.id, { onDelete: 'cascade' })
     .notNull(),
   exerciseId: integer('exercise_id')
-    .notNull()
     .references(() => exerciseTable.id, { onDelete: 'cascade' })
     .notNull(),
   order: real('order').notNull().default(-1),
@@ -64,23 +83,7 @@ export const setTable = sqliteTable('set', {
     .notNull()
     .references(() => workoutExerciseTable.id, { onDelete: 'cascade' })
     .notNull(),
-  userId: text('user_id').notNull(),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => userTable.id, { onDelete: 'cascade' }),
 });
-
-// export type InsertExercise = typeof exerciseTable.$inferInsert;
-// export type SelectExercise = typeof exerciseTable.$inferSelect;
-
-// export type InsertTemplate = typeof templateTable.$inferInsert;
-// export type SelectTemplate = typeof templateTable.$inferSelect;
-
-// export type InsertTemplateExercise = typeof templateExerciseTable.$inferInsert;
-// export type SelectTemplateExercise = typeof templateExerciseTable.$inferSelect;
-
-// export type InsertWorkout = typeof workoutTable.$inferInsert;
-// export type SelectWorkout = typeof workoutTable.$inferSelect;
-
-// export type InsertWorkoutExercise = typeof workoutExerciseTable.$inferInsert;
-// export type SelectWorkoutExercise = typeof workoutExerciseTable.$inferSelect;
-
-// export type InsertSet = typeof setTable.$inferInsert;
-// export type SelectSet = typeof setTable.$inferSelect;

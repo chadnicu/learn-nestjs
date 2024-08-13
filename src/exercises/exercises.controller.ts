@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { ExercisesService } from './exercises.service';
 import { CreateExerciseDto, UpdateExerciseDto } from './dto';
-import { StringIdParamDto } from 'src/common/string-id-param.dto';
 import { NumberIdParamDto } from 'src/common/number-id-param.dto';
 
 @Controller('exercises')
@@ -17,7 +16,7 @@ export class ExercisesController {
   constructor(private readonly exercisesService: ExercisesService) {}
 
   @Get('/user/:id')
-  async findAllByUser(@Param() { id: userId }: StringIdParamDto) {
+  async findAllByUser(@Param() { id: userId }: NumberIdParamDto) {
     return await this.exercisesService.findAllByUser(userId);
   }
 

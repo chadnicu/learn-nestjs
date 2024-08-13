@@ -5,57 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1722926391443,
-      "tag": "0000_vengeful_cammi",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1722927835120,
-      "tag": "0001_elite_calypso",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1723018785266,
-      "tag": "0002_amusing_human_robot",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1723130226284,
-      "tag": "0003_silly_vindicator",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1723130259880,
-      "tag": "0004_fresh_wolf_cub",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1723130415119,
-      "tag": "0005_fair_lizard",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1723130638928,
-      "tag": "0006_vengeful_mercury",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "6",
-      "when": 1723130672079,
-      "tag": "0007_old_lake",
+      "when": 1723542298856,
+      "tag": "0000_reflective_sunspot",
       "breakpoints": true
     }
   ]

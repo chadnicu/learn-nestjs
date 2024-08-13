@@ -8,7 +8,7 @@ import { CreateExerciseDto, UpdateExerciseDto } from './dto';
 export class ExercisesService {
   constructor(@Inject(DrizzleAsyncProvider) private db: Database) {}
 
-  async findAllByUser(userId: string) {
+  async findAllByUser(userId: number) {
     return await this.db
       .select()
       .from(exerciseTable)
