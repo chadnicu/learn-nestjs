@@ -1,75 +1,65 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { Database, DrizzleAsyncProvider } from 'src/db/db.module';
 import { workoutExerciseTable, workoutTable } from 'src/db/schema';
-import {
-  CreateWorkoutDto,
-  UpdateWorkoutDto,
-  UpdateWorkoutExerciseDto,
-} from './dto';
+import { CreateWorkoutDto, UpdateWorkoutDto } from './dto';
 
 @Injectable()
 export class WorkoutsService {
   constructor(@Inject(DrizzleAsyncProvider) private db: Database) {}
 
-  async findAllByUser(userId: number) {
-    return await this.db
-      .select()
-      .from(workoutTable)
-      .where(eq(workoutTable.userId, userId));
+  async create(data: CreateWorkoutDto) {
+    const [created] = await this.db
+      .insert(workoutTable)
+      .values(data)
+      .returning();
+
+    return created;
   }
 
   async find(id: number) {
-    return (
-      await this.db
-        .select()
-        .from(workoutTable)
-        .where(eq(workoutExerciseTable.id, id))
-    )[0];
+    const [workout] = await this.db
+      .select()
+      .from(workoutTable)
+      .where(eq(workoutExerciseTable.id, id));
+
+    if (!workout)
+      throw new NotFoundException(`Workout with id #${id} not found`);
+
+    return workout;
   }
 
-  async create(data: CreateWorkoutDto) {
-    await this.db.insert(workoutTable).values(data);
-  }
+  findAllByUser(userId: number) {
+    const workouts = this.db
+      .select()
+      .from(workoutTable)
+      .where(eq(workoutTable.userId, userId));
 
-  async delete(id: number) {
-    await this.db.delete(workoutTable).where(eq(workoutTable.id, id));
+    return workouts;
   }
 
   async update(id: number, data: UpdateWorkoutDto) {
-    await this.db.update(workoutTable).set(data).where(eq(workoutTable.id, id));
+    const [updated] = await this.db
+      .update(workoutTable)
+      .set(data)
+      .where(eq(workoutTable.id, id))
+      .returning();
+
+    if (!updated)
+      throw new NotFoundException(`Workout with id #${id} not found`);
+
+    return updated;
   }
 
-  async getExercises(workoutId: number) {
-    return await this.db
-      .select()
-      .from(workoutExerciseTable)
-      .where(eq(workoutExerciseTable.workoutId, workoutId));
-  }
+  async delete(id: number) {
+    const [deleted] = await this.db
+      .delete(workoutTable)
+      .where(eq(workoutTable.id, id))
+      .returning();
 
-  async addExercise(
-    workoutId: number,
-    exerciseId: number,
-    body: UpdateWorkoutExerciseDto,
-  ) {
-    await this.db
-      .insert(workoutExerciseTable)
-      .values({ workoutId, exerciseId, ...body });
-  }
+    if (!deleted)
+      throw new NotFoundException(`Workout with id #${id} not found`);
 
-  async updateExercise(
-    workoutExerciseId: number,
-    body: UpdateWorkoutExerciseDto,
-  ) {
-    await this.db
-      .update(workoutExerciseTable)
-      .set(body)
-      .where(eq(workoutExerciseTable.id, workoutExerciseId));
-  }
-
-  async removeExercise(workoutExerciseId: number) {
-    await this.db
-      .delete(workoutExerciseTable)
-      .where(eq(workoutExerciseTable.id, workoutExerciseId));
+    return deleted;
   }
 }

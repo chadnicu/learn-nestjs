@@ -7,16 +7,6 @@ CREATE TABLE `exercise` (
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE `set` (
-	`id` integer PRIMARY KEY NOT NULL,
-	`reps` integer,
-	`weight` integer,
-	`workout_exercise_id` integer NOT NULL,
-	`user_id` integer NOT NULL,
-	FOREIGN KEY (`workout_exercise_id`) REFERENCES `workout_exercise`(`id`) ON UPDATE no action ON DELETE cascade,
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
-);
---> statement-breakpoint
 CREATE TABLE `template_exercise` (
 	`id` integer PRIMARY KEY NOT NULL,
 	`todo` text,
@@ -25,6 +15,15 @@ CREATE TABLE `template_exercise` (
 	`order` integer DEFAULT -1 NOT NULL,
 	FOREIGN KEY (`exercise_id`) REFERENCES `exercise`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`template_id`) REFERENCES `template`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE `template_set` (
+	`id` integer PRIMARY KEY NOT NULL,
+	`reps` integer,
+	`weight` integer,
+	`rir` integer,
+	`template_exercise_id` integer NOT NULL,
+	FOREIGN KEY (`template_exercise_id`) REFERENCES `template_exercise`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `template` (
@@ -40,7 +39,7 @@ CREATE TABLE `user` (
 	`username` text NOT NULL,
 	`email` text NOT NULL,
 	`password_hash` text NOT NULL,
-	`password_salt` text NOT NULL,
+	`weight_unit` text DEFAULT 'kg' NOT NULL,
 	`first_name` text,
 	`last_name` text,
 	`date_of_birth` text,
@@ -57,6 +56,16 @@ CREATE TABLE `workout_exercise` (
 	`order` real DEFAULT -1 NOT NULL,
 	FOREIGN KEY (`workout_id`) REFERENCES `workout`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`exercise_id`) REFERENCES `exercise`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE `workout_set` (
+	`id` integer PRIMARY KEY NOT NULL,
+	`reps` integer,
+	`weight` integer,
+	`rir` integer,
+	`comment` text,
+	`workout_exercise_id` integer NOT NULL,
+	FOREIGN KEY (`workout_exercise_id`) REFERENCES `workout_exercise`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `workout` (

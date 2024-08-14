@@ -9,37 +9,34 @@ import {
 } from '@nestjs/common';
 import { ExercisesService } from './exercises.service';
 import { CreateExerciseDto, UpdateExerciseDto } from './dto';
-import { NumberIdParamDto } from 'src/common/number-id-param.dto';
+import { NumberIdParamDto } from 'src/common/dto';
 
 @Controller('exercises')
 export class ExercisesController {
   constructor(private readonly exercisesService: ExercisesService) {}
 
-  @Get('/user/:id')
-  async findAllByUser(@Param() { id: userId }: NumberIdParamDto) {
-    return await this.exercisesService.findAllByUser(userId);
+  @Post()
+  create(@Body() body: CreateExerciseDto) {
+    return this.exercisesService.create(body);
   }
 
   @Get(':id')
-  async find(@Param() { id }: NumberIdParamDto) {
-    return await this.exercisesService.find(id);
+  find(@Param() { id }: NumberIdParamDto) {
+    return this.exercisesService.find(id);
   }
 
-  @Post()
-  async create(@Body() body: CreateExerciseDto) {
-    await this.exercisesService.create(body);
-  }
-
-  @Delete(':id')
-  async delete(@Param() { id }: NumberIdParamDto) {
-    await this.exercisesService.delete(id);
+  @Get('/user/:id')
+  findAllByUser(@Param() { id: userId }: NumberIdParamDto) {
+    return this.exercisesService.findAllByUser(userId);
   }
 
   @Patch(':id')
-  async update(
-    @Param() { id }: NumberIdParamDto,
-    @Body() body: UpdateExerciseDto,
-  ) {
-    await this.exercisesService.update(id, body);
+  update(@Param() { id }: NumberIdParamDto, @Body() body: UpdateExerciseDto) {
+    return this.exercisesService.update(id, body);
+  }
+
+  @Delete(':id')
+  delete(@Param() { id }: NumberIdParamDto) {
+    return this.exercisesService.delete(id);
   }
 }

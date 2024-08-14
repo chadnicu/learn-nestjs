@@ -1,28 +1,28 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 
-import { config } from 'dotenv';
 import { drizzle, LibSQLDatabase } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client';
 import * as schema from './schema';
-
-config({ path: '.env' });
+import { ConfigService } from '@nestjs/config';
 
 export type Database = LibSQLDatabase<Record<string, never>>;
 export const DrizzleAsyncProvider = 'drizzleProvider';
 
 const drizzleProvider = {
   provide: DrizzleAsyncProvider,
-  useFactory: async () => {
+  useFactory: async (configService: ConfigService) => {
     const client = createClient({
-      url: process.env.DATABASE_URL!,
-      authToken: process.env.DATABASE_AUTH_TOKEN!,
+      url: configService.get<string>('DATABASE_URL'),
+      authToken: configService.get<string>('DATABASE_AUTH_TOKEN'),
     });
     const db = drizzle(client, { schema });
     return db;
   },
+  inject: [ConfigService],
   exports: [DrizzleAsyncProvider],
 };
 
+@Global()
 @Module({
   providers: [drizzleProvider],
   exports: [drizzleProvider],

@@ -1,32 +1,27 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ExercisesModule } from './exercises/exercises.module';
-// import { ConfigModule } from '@nestjs/config';
 import { WorkoutsModule } from './workouts/workouts.module';
 import { TemplatesModule } from './templates/templates.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-// import * as Joi from 'joi';
+import { DatabaseModule } from './db/db.module';
+import { TemplateExercisesModule } from './template-exercises/template-exercises.module';
+import { WorkoutExercisesModule } from './workout-exercises/workout-exercises.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    DatabaseModule,
     ExercisesModule,
     WorkoutsModule,
     TemplatesModule,
     AuthModule,
     UsersModule,
-    // ConfigModule.forRoot({
-    //   validationSchema: Joi.object({
-    //     POSTGRES_HOST: Joi.string().required(),
-    //     POSTGRES_PORT: Joi.number().required(),
-    //     POSTGRES_USER: Joi.string().required(),
-    //     POSTGRES_PASSWORD: Joi.string().required(),
-    //     POSTGRES_DB: Joi.string().required(),
-    //   }),
-    // }),
+    TemplateExercisesModule,
+    WorkoutExercisesModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

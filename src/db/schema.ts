@@ -6,7 +6,7 @@ export const userTable = sqliteTable('user', {
   username: text('username').notNull().unique(),
   email: text('email').notNull().unique(),
   passwordHash: text('password_hash').notNull(),
-  passwordSalt: text('password_salt').notNull(),
+  weightUnit: text('weight_unit').notNull().default('kg'),
   firstName: text('first_name'),
   lastName: text('last_name'),
   dateOfBirth: text('date_of_birth'),
@@ -75,15 +75,25 @@ export const workoutExerciseTable = sqliteTable('workout_exercise', {
   order: real('order').notNull().default(-1),
 });
 
-export const setTable = sqliteTable('set', {
+export const workoutSetTable = sqliteTable('workout_set', {
   id: integer('id').primaryKey(),
   reps: integer('reps'),
   weight: integer('weight'),
+  rir: integer('rir'),
+  comment: text('comment'),
   workoutExerciseId: integer('workout_exercise_id')
     .notNull()
     .references(() => workoutExerciseTable.id, { onDelete: 'cascade' })
     .notNull(),
-  userId: integer('user_id')
+});
+
+export const templateSetTable = sqliteTable('template_set', {
+  id: integer('id').primaryKey(),
+  reps: integer('reps'),
+  weight: integer('weight'),
+  rir: integer('rir'),
+  templateExerciseId: integer('template_exercise_id')
     .notNull()
-    .references(() => userTable.id, { onDelete: 'cascade' }),
+    .references(() => templateExerciseTable.id, { onDelete: 'cascade' })
+    .notNull(),
 });

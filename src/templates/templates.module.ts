@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TemplatesController } from './templates.controller';
 import { TemplatesService } from './templates.service';
-import { DatabaseModule } from 'src/db/db.module';
 
 @Module({
-  imports: [DatabaseModule],
   controllers: [TemplatesController],
   providers: [TemplatesService],
 })

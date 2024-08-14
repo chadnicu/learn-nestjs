@@ -16,7 +16,7 @@ export class CreateUserDto {
 
   @IsString()
   @ApiProperty()
-  readonly passwordSalt: string;
+  readonly weightUnit: string;
 
   @IsOptional()
   @IsString()

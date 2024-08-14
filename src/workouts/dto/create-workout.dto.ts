@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateWorkoutDto {
   @IsString()
@@ -31,7 +31,7 @@ export class CreateWorkoutDto {
   @ApiPropertyOptional()
   readonly comment?: string;
 
-  @IsString()
+  @IsNumber()
   @ApiProperty()
   readonly userId: number;
 }

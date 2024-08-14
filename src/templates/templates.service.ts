@@ -1,72 +1,65 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { Database, DrizzleAsyncProvider } from 'src/db/db.module';
-import { templateExerciseTable, templateTable } from 'src/db/schema';
+import { templateTable } from 'src/db/schema';
 import { CreateTemplateDto, UpdateTemplateDto } from './dto';
-import { UpdateTemplateExerciseDto } from './dto/update-template-exercise.dto';
 
 @Injectable()
 export class TemplatesService {
   constructor(@Inject(DrizzleAsyncProvider) private db: Database) {}
 
-  async findAllByUser(userId: number) {
-    return await this.db
-      .select()
-      .from(templateTable)
-      .where(eq(templateTable.userId, userId));
+  async create(data: CreateTemplateDto) {
+    const [created] = await this.db
+      .insert(templateTable)
+      .values(data)
+      .returning();
+
+    return created;
   }
 
   async find(id: number) {
-    return (
-      await this.db.select().from(templateTable).where(eq(templateTable.id, id))
-    )[0];
+    const [template] = await this.db
+      .select()
+      .from(templateTable)
+      .where(eq(templateTable.id, id));
+
+    if (!template)
+      throw new NotFoundException(`Template with id #${id} not found`);
+
+    return template;
   }
 
-  async create(data: CreateTemplateDto) {
-    await this.db.insert(templateTable).values(data);
-  }
+  findAllByUser(userId: number) {
+    const templates = this.db
+      .select()
+      .from(templateTable)
+      .where(eq(templateTable.userId, userId));
 
-  async delete(id: number) {
-    await this.db.delete(templateTable).where(eq(templateTable.id, id));
+    return templates;
   }
 
   async update(id: number, data: UpdateTemplateDto) {
-    await this.db
+    const [updated] = await this.db
       .update(templateTable)
       .set(data)
-      .where(eq(templateTable.id, id));
+      .where(eq(templateTable.id, id))
+      .returning();
+
+    if (!updated)
+      throw new NotFoundException(`Template with id #${id} not found`);
+
+    return updated;
   }
 
-  async addExercise(
-    templateId: number,
-    exerciseId: number,
-    body: UpdateTemplateExerciseDto,
-  ) {
-    await this.db
-      .insert(templateExerciseTable)
-      .values({ templateId, exerciseId, ...body });
-  }
+  async delete(id: number) {
+    const [deleted] = await this.db
+      .delete(templateTable)
+      .where(eq(templateTable.id, id))
+      .returning();
 
-  async getExercises(templateId: number) {
-    return await this.db
-      .select()
-      .from(templateExerciseTable)
-      .where(eq(templateExerciseTable.templateId, templateId));
-  }
+    if (!deleted)
+      throw new NotFoundException(`Template with id #${id} not found`);
 
-  async updateExercise(
-    templateExerciseId: number,
-    body: UpdateTemplateExerciseDto,
-  ) {
-    await this.db
-      .update(templateExerciseTable)
-      .set(body)
-      .where(eq(templateExerciseTable.id, templateExerciseId));
-  }
-
-  async removeExercise(templateExerciseId: number) {
-    await this.db
-      .delete(templateExerciseTable)
-      .where(eq(templateExerciseTable.id, templateExerciseId));
+    return deleted;
   }
 }
