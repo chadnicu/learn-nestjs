@@ -1,5 +1,11 @@
 import { sql } from 'drizzle-orm';
-import { integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import {
+  integer,
+  real,
+  sqliteTable,
+  text,
+  unique,
+} from 'drizzle-orm/sqlite-core';
 
 export const userTable = sqliteTable('user', {
   id: integer('id').primaryKey(),
@@ -37,17 +43,23 @@ export const templateTable = sqliteTable('template', {
     .references(() => userTable.id, { onDelete: 'cascade' }),
 });
 
-export const templateExerciseTable = sqliteTable('template_exercise', {
-  id: integer('id').primaryKey(),
-  toDo: text('todo'),
-  exerciseId: integer('exercise_id')
-    .notNull()
-    .references(() => exerciseTable.id, { onDelete: 'cascade' }),
-  templateId: integer('template_id')
-    .references(() => templateTable.id, { onDelete: 'cascade' })
-    .notNull(),
-  order: integer('order').notNull().default(-1),
-});
+export const templateExerciseTable = sqliteTable(
+  'template_exercise',
+  {
+    id: integer('id').primaryKey(),
+    toDo: text('todo'),
+    exerciseId: integer('exercise_id')
+      .notNull()
+      .references(() => exerciseTable.id, { onDelete: 'cascade' }),
+    templateId: integer('template_id')
+      .references(() => templateTable.id, { onDelete: 'cascade' })
+      .notNull(),
+    order: integer('order').notNull().default(-1),
+  },
+  (t) => ({
+    uniqueConstraint: unique().on(t.exerciseId, t.templateId),
+  }),
+);
 
 export const workoutTable = sqliteTable('workout', {
   id: integer('id').primaryKey(),
@@ -64,18 +76,24 @@ export const workoutTable = sqliteTable('workout', {
     .references(() => userTable.id, { onDelete: 'cascade' }),
 });
 
-export const workoutExerciseTable = sqliteTable('workout_exercise', {
-  id: integer('id').primaryKey(),
-  toDo: text('todo'),
-  comment: text('comment'),
-  workoutId: integer('workout_id')
-    .references(() => workoutTable.id, { onDelete: 'cascade' })
-    .notNull(),
-  exerciseId: integer('exercise_id')
-    .references(() => exerciseTable.id, { onDelete: 'cascade' })
-    .notNull(),
-  order: real('order').notNull().default(-1),
-});
+export const workoutExerciseTable = sqliteTable(
+  'workout_exercise',
+  {
+    id: integer('id').primaryKey(),
+    toDo: text('todo'),
+    comment: text('comment'),
+    workoutId: integer('workout_id')
+      .references(() => workoutTable.id, { onDelete: 'cascade' })
+      .notNull(),
+    exerciseId: integer('exercise_id')
+      .references(() => exerciseTable.id, { onDelete: 'cascade' })
+      .notNull(),
+    order: real('order').notNull().default(-1),
+  },
+  (w) => ({
+    uniqueConstraint: unique().on(w.exerciseId, w.workoutId),
+  }),
+);
 
 export const workoutSetTable = sqliteTable('workout_set', {
   id: integer('id').primaryKey(),

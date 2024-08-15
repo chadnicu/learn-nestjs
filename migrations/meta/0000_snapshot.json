@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "06a61a68-145d-46ea-977a-01241a6ad298",
+  "id": "0d147bd5-98b2-486c-a3e6-18cd6da4dfbf",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "exercise": {
@@ -102,7 +102,16 @@
           "default": -1
         }
       },
-      "indexes": {},
+      "indexes": {
+        "template_exercise_exercise_id_template_id_unique": {
+          "name": "template_exercise_exercise_id_template_id_unique",
+          "columns": [
+            "exercise_id",
+            "template_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "template_exercise_exercise_id_exercise_id_fk": {
           "name": "template_exercise_exercise_id_exercise_id_fk",
@@ -387,7 +396,16 @@
           "default": -1
         }
       },
-      "indexes": {},
+      "indexes": {
+        "workout_exercise_exercise_id_workout_id_unique": {
+          "name": "workout_exercise_exercise_id_workout_id_unique",
+          "columns": [
+            "exercise_id",
+            "workout_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "workout_exercise_workout_id_workout_id_fk": {
           "name": "workout_exercise_workout_id_workout_id_fk",

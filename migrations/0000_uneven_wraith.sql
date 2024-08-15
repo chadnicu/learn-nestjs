@@ -80,5 +80,7 @@ CREATE TABLE `workout` (
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE UNIQUE INDEX `template_exercise_exercise_id_template_id_unique` ON `template_exercise` (`exercise_id`,`template_id`);--> statement-breakpoint
 CREATE UNIQUE INDEX `user_username_unique` ON `user` (`username`);--> statement-breakpoint
-CREATE UNIQUE INDEX `user_email_unique` ON `user` (`email`);
+CREATE UNIQUE INDEX `user_email_unique` ON `user` (`email`);--> statement-breakpoint
+CREATE UNIQUE INDEX `workout_exercise_exercise_id_workout_id_unique` ON `workout_exercise` (`exercise_id`,`workout_id`);
