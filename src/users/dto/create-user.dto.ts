@@ -29,13 +29,15 @@ export class CreateUserDto {
   readonly lastName?: string;
 
   @IsOptional()
-  @IsString()
+  @IsNumber()
   @ApiPropertyOptional()
-  readonly dateOfBirth?: string;
+  readonly dateOfBirth?: number;
 
   @IsNumber()
+  @IsOptional()
   readonly createdAt: number;
 
   @IsNumber()
+  @IsOptional()
   readonly updatedAt: number;
 }

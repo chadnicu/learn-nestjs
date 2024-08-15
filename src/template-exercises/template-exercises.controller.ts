@@ -7,7 +7,11 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { AddExerciseToTemplateDto, UpdateTemplateExerciseDto } from './dto';
+import {
+  AddExerciseToTemplateDto,
+  CreateTemplateExerciseDto,
+  UpdateTemplateExerciseDto,
+} from './dto';
 import { TemplateExercisesService } from './template-exercises.service';
 import { NumberIdParamDto } from 'src/common/dto';
 
@@ -20,7 +24,7 @@ export class TemplateExercisesController {
   @Post(':templateId/exercises/:exerciseId')
   create(
     @Param() ids: AddExerciseToTemplateDto,
-    @Body() body: UpdateTemplateExerciseDto,
+    @Body() body: CreateTemplateExerciseDto,
   ) {
     return this.templateExercisesService.create({ ...ids, ...body });
   }

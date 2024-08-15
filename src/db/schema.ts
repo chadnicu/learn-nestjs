@@ -9,7 +9,7 @@ export const userTable = sqliteTable('user', {
   weightUnit: text('weight_unit').notNull().default('kg'),
   firstName: text('first_name'),
   lastName: text('last_name'),
-  dateOfBirth: text('date_of_birth'),
+  dateOfBirth: integer('date_of_birth', { mode: 'number' }),
   createdAt: integer('created_at', { mode: 'number' })
     .notNull()
     .default(sql`(unixepoch())`),
@@ -53,7 +53,9 @@ export const workoutTable = sqliteTable('workout', {
   id: integer('id').primaryKey(),
   title: text('title').notNull(),
   description: text('description'),
-  date: text('date').default(sql`CURRENT_DATE`),
+  date: integer('date', { mode: 'number' })
+    .notNull()
+    .default(sql`(unixepoch())`),
   started: text('started'),
   finished: text('finished'),
   comment: text('comment'),

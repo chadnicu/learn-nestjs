@@ -1,6 +1,10 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Database, DrizzleAsyncProvider } from 'src/db/db.module';
-import { CreateTemplateExerciseDto, UpdateTemplateExerciseDto } from './dto';
+import {
+  AddExerciseToTemplateDto,
+  CreateTemplateExerciseDto,
+  UpdateTemplateExerciseDto,
+} from './dto';
 import { templateExerciseTable } from 'src/db/schema';
 import { eq } from 'drizzle-orm';
 
@@ -8,10 +12,10 @@ import { eq } from 'drizzle-orm';
 export class TemplateExercisesService {
   constructor(@Inject(DrizzleAsyncProvider) private db: Database) {}
 
-  async create(body: CreateTemplateExerciseDto) {
+  async create(data: AddExerciseToTemplateDto & CreateTemplateExerciseDto) {
     const [created] = await this.db
       .insert(templateExerciseTable)
-      .values(body)
+      .values(data)
       .returning();
 
     return created;

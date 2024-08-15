@@ -42,7 +42,7 @@ CREATE TABLE `user` (
 	`weight_unit` text DEFAULT 'kg' NOT NULL,
 	`first_name` text,
 	`last_name` text,
-	`date_of_birth` text,
+	`date_of_birth` integer,
 	`created_at` integer DEFAULT (unixepoch()) NOT NULL,
 	`updated_at` integer DEFAULT (unixepoch()) NOT NULL
 );
@@ -72,7 +72,7 @@ CREATE TABLE `workout` (
 	`id` integer PRIMARY KEY NOT NULL,
 	`title` text NOT NULL,
 	`description` text,
-	`date` text DEFAULT CURRENT_DATE,
+	`date` integer DEFAULT (unixepoch()) NOT NULL,
 	`started` text,
 	`finished` text,
 	`comment` text,

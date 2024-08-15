@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { Database, DrizzleAsyncProvider } from 'src/db/db.module';
-import { workoutExerciseTable, workoutTable } from 'src/db/schema';
+import { workoutTable } from 'src/db/schema';
 import { CreateWorkoutDto, UpdateWorkoutDto } from './dto';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class WorkoutsService {
     const [workout] = await this.db
       .select()
       .from(workoutTable)
-      .where(eq(workoutExerciseTable.id, id));
+      .where(eq(workoutTable.id, id));
 
     if (!workout)
       throw new NotFoundException(`Workout with id #${id} not found`);

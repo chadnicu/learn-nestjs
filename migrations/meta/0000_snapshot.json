@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "4996224a-6283-4138-97b2-00267bd38feb",
+  "id": "06a61a68-145d-46ea-977a-01241a6ad298",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "exercise": {
@@ -298,7 +298,7 @@
         },
         "date_of_birth": {
           "name": "date_of_birth",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -510,11 +510,11 @@
         },
         "date": {
           "name": "date",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_DATE"
+          "default": "(unixepoch())"
         },
         "started": {
           "name": "started",

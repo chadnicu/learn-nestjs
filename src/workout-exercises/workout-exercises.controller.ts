@@ -8,7 +8,11 @@ import {
   Post,
 } from '@nestjs/common';
 import { WorkoutExercisesService } from './workout-exercises.service';
-import { AddExerciseToWorkoutDto, UpdateWorkoutExerciseDto } from './dto';
+import {
+  AddExerciseToWorkoutDto,
+  CreateWorkoutExerciseDto,
+  UpdateWorkoutExerciseDto,
+} from './dto';
 import { NumberIdParamDto } from 'src/common/dto';
 
 @Controller('workouts')
@@ -20,7 +24,7 @@ export class WorkoutExercisesController {
   @Post(':workoutId/exercises/:exerciseId')
   create(
     @Param() ids: AddExerciseToWorkoutDto,
-    @Body() body: UpdateWorkoutExerciseDto,
+    @Body() body: CreateWorkoutExerciseDto,
   ) {
     return this.workoutExercisesService.create({ ...ids, ...body });
   }
