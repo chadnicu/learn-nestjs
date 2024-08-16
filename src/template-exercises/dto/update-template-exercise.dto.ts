@@ -9,4 +9,9 @@ export class UpdateTemplateExerciseDto extends PartialType(
   @IsNumber()
   @ApiPropertyOptional()
   readonly exerciseId?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @ApiPropertyOptional()
+  readonly templateId?: number;
 }

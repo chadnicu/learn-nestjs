@@ -10,6 +10,8 @@ import { WorkoutExercisesModule } from './workout-exercises/workout-exercises.mo
 import { ConfigModule } from '@nestjs/config';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
+import { WorkoutSetsModule } from './workout-sets/workout-sets.module';
+import { TemplateSetsModule } from './template-sets/template-sets.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { AppController } from './app.controller';
     UsersModule,
     TemplateExercisesModule,
     WorkoutExercisesModule,
+    WorkoutSetsModule,
+    TemplateSetsModule,
   ],
   providers: [AppService],
   controllers: [AppController],

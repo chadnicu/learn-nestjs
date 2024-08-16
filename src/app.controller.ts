@@ -7,11 +7,11 @@ export class AppController {
 
   @Get('getAllRows')
   getAllData() {
-    return this.appService.getAllData();
+    return this.appService.getAllRows();
   }
 
   @Delete('deleteAllRows')
   deleteAllData() {
-    return this.appService.deleteAllData();
+    return this.appService.deleteAllRows();
   }
 }

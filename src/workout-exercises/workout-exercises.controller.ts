@@ -34,7 +34,7 @@ export class WorkoutExercisesController {
     return this.workoutExercisesService.findAll(workoutId);
   }
 
-  @Patch('/exercises/:id')
+  @Patch('exercises/:id')
   update(
     @Param() { id }: NumberIdParamDto,
     @Body() body: UpdateWorkoutExerciseDto,
@@ -42,7 +42,7 @@ export class WorkoutExercisesController {
     return this.workoutExercisesService.update(id, body);
   }
 
-  @Delete('/exercises/:id')
+  @Delete('exercises/:id')
   delete(@Param() { id }: NumberIdParamDto) {
     return this.workoutExercisesService.delete(id);
   }

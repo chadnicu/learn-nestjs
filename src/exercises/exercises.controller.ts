@@ -25,7 +25,7 @@ export class ExercisesController {
     return this.exercisesService.find(id);
   }
 
-  @Get('/user/:id')
+  @Get('user/:id')
   findAllByUser(@Param() { id: userId }: NumberIdParamDto) {
     return this.exercisesService.findAllByUser(userId);
   }

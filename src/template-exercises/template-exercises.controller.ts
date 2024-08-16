@@ -34,7 +34,7 @@ export class TemplateExercisesController {
     return this.templateExercisesService.findAll(templateId);
   }
 
-  @Patch('/exercises/:id')
+  @Patch('exercises/:id')
   update(
     @Param() { id }: NumberIdParamDto,
     @Body() body: UpdateTemplateExerciseDto,
@@ -42,7 +42,7 @@ export class TemplateExercisesController {
     return this.templateExercisesService.update(id, body);
   }
 
-  @Delete('/exercises/:id')
+  @Delete('exercises/:id')
   delete(@Param() { id }: NumberIdParamDto) {
     return this.templateExercisesService.delete(id);
   }

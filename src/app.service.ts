@@ -15,7 +15,7 @@ import {
 export class AppService {
   constructor(@Inject(DrizzleAsyncProvider) private db: Database) {}
 
-  async getAllData() {
+  async getAllRows() {
     const [
       users,
       exercises,
@@ -48,7 +48,7 @@ export class AppService {
     };
   }
 
-  async deleteAllData() {
+  async deleteAllRows() {
     await Promise.all([
       this.db.delete(templateSetTable).all(),
       this.db.delete(workoutSetTable).all(),
@@ -68,20 +68,20 @@ export class AppService {
     await this.db.delete(userTable).all();
 
     return 'Deleted all rows';
-    /* 
-    -- if you need to drop the tables too:
 
-    DROP TABLE IF EXISTS template_set;
-    DROP TABLE IF EXISTS workout_set;
-   
-    DROP TABLE IF EXISTS template_exercise;
-    DROP TABLE IF EXISTS workout_exercise;
-    
-    DROP TABLE IF EXISTS template;
-    DROP TABLE IF EXISTS workout;
-    DROP TABLE IF EXISTS exercise;
-    
-    DROP TABLE IF EXISTS user;
+    // In case I need to drop the tables:
+    /* 
+      DROP TABLE IF EXISTS template_set;
+      DROP TABLE IF EXISTS workout_set;
+      
+      DROP TABLE IF EXISTS template_exercise;
+      DROP TABLE IF EXISTS workout_exercise;
+      
+      DROP TABLE IF EXISTS template;
+      DROP TABLE IF EXISTS workout;
+      DROP TABLE IF EXISTS exercise;
+      
+      DROP TABLE IF EXISTS user;
     */
   }
 }

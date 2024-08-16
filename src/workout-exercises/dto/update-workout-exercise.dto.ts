@@ -9,4 +9,9 @@ export class UpdateWorkoutExerciseDto extends PartialType(
   @IsNumber()
   @ApiPropertyOptional()
   readonly exerciseId?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @ApiPropertyOptional()
+  readonly workoutId?: number;
 }
