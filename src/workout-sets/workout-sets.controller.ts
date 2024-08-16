@@ -15,9 +15,12 @@ import { NumberIdParamDto } from 'src/common/dto';
 export class WorkoutSetsController {
   constructor(private readonly workoutSetsService: WorkoutSetsService) {}
 
-  @Post('sets')
-  create(@Body() body: CreateWorkoutSetDto) {
-    return this.workoutSetsService.create(body);
+  @Post('exercises/:id/sets')
+  create(
+    @Param() { id: workoutExerciseId }: NumberIdParamDto,
+    @Body() body: CreateWorkoutSetDto,
+  ) {
+    return this.workoutSetsService.create({ ...body, workoutExerciseId });
   }
 
   @Get('exercises/:id/sets')
@@ -25,12 +28,12 @@ export class WorkoutSetsController {
     return this.workoutSetsService.findAllByWorkoutExerciseId(id);
   }
 
-  @Patch('sets/:id')
+  @Patch('exercises/sets/:id')
   update(@Param() { id }: NumberIdParamDto, @Body() body: UpdateWorkoutSetDto) {
     return this.workoutSetsService.update(id, body);
   }
 
-  @Delete('sets/:id')
+  @Delete('exercises/sets/:id')
   delete(@Param() { id }: NumberIdParamDto) {
     return this.workoutSetsService.delete(id);
   }

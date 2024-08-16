@@ -8,10 +8,10 @@ import { eq } from 'drizzle-orm';
 export class WorkoutSetsService {
   constructor(@Inject(DrizzleAsyncProvider) private db: Database) {}
 
-  async create(body: CreateWorkoutSetDto) {
+  async create(data: CreateWorkoutSetDto & { workoutExerciseId: number }) {
     const [created] = await this.db
       .insert(workoutSetTable)
-      .values(body)
+      .values(data)
       .returning();
 
     return created;
@@ -30,7 +30,8 @@ export class WorkoutSetsService {
   async update(id: number, data: UpdateWorkoutSetDto) {
     const [updated] = await this.db
       .update(workoutSetTable)
-      .set(data)
+      // .set(data) eroare
+      .set({ workoutExerciseId: undefined, ...data })
       .where(eq(workoutSetTable.id, id))
       .returning();
 

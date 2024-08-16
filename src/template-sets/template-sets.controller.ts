@@ -15,9 +15,12 @@ import { CreateTemplateSetDto, UpdateTemplateSetDto } from './dto';
 export class TemplateSetsController {
   constructor(private readonly templateSetsService: TemplateSetsService) {}
 
-  @Post('sets')
-  create(@Body() body: CreateTemplateSetDto) {
-    return this.templateSetsService.create(body);
+  @Post('exercises/:id/sets')
+  create(
+    @Param() { id: templateExerciseId }: NumberIdParamDto,
+    @Body() body: CreateTemplateSetDto,
+  ) {
+    return this.templateSetsService.create({ ...body, templateExerciseId });
   }
 
   @Get('exercises/:id/sets')
@@ -25,7 +28,7 @@ export class TemplateSetsController {
     return this.templateSetsService.findAllByTemplateExerciseId(id);
   }
 
-  @Patch('sets/:id')
+  @Patch('exercises/sets/:id')
   update(
     @Param() { id }: NumberIdParamDto,
     @Body() body: UpdateTemplateSetDto,
@@ -33,7 +36,7 @@ export class TemplateSetsController {
     return this.templateSetsService.update(id, body);
   }
 
-  @Delete('sets/:id')
+  @Delete('exercises/sets/:id')
   delete(@Param() { id }: NumberIdParamDto) {
     return this.templateSetsService.delete(id);
   }

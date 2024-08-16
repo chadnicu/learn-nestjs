@@ -8,7 +8,7 @@ import { eq } from 'drizzle-orm';
 export class TemplateSetsService {
   constructor(@Inject(DrizzleAsyncProvider) private db: Database) {}
 
-  async create(body: CreateTemplateSetDto) {
+  async create(body: CreateTemplateSetDto & { templateExerciseId: number }) {
     const [created] = await this.db
       .insert(templateSetTable)
       .values(body)
@@ -30,7 +30,7 @@ export class TemplateSetsService {
   async update(id: number, data: UpdateTemplateSetDto) {
     const [updated] = await this.db
       .update(templateSetTable)
-      .set(data)
+      .set({ templateExerciseId: undefined, ...data })
       .where(eq(templateSetTable.id, id))
       .returning();
 
