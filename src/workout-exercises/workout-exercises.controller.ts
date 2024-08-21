@@ -14,7 +14,9 @@ import {
   UpdateWorkoutExerciseDto,
 } from './dto';
 import { NumberIdParamDto } from 'src/common/dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('workout-exercises')
 @Controller('workouts')
 export class WorkoutExercisesController {
   constructor(

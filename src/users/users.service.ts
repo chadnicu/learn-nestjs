@@ -3,24 +3,42 @@ import { Database, DrizzleAsyncProvider } from 'src/db/db.module';
 import { eq } from 'drizzle-orm';
 import { userTable } from 'src/db/schema';
 import { CreateUserDto, UpdateUserDto } from './dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(@Inject(DrizzleAsyncProvider) private db: Database) {}
 
   async create(data: CreateUserDto) {
-    const [created] = await this.db.insert(userTable).values(data).returning();
+    const hash = await bcrypt.hash(data.passwordHash, 10);
+
+    const [created] = await this.db
+      .insert(userTable)
+      .values({ ...data, passwordHash: hash })
+      .returning();
 
     return created;
   }
 
-  async find(id: number) {
+  async findById(id: number) {
     const [user] = await this.db
       .select()
       .from(userTable)
       .where(eq(userTable.id, id));
 
     if (!user) throw new NotFoundException(`User with id #${id} not found`);
+
+    return user;
+  }
+
+  async findByUsername(username: string) {
+    const [user] = await this.db
+      .select()
+      .from(userTable)
+      .where(eq(userTable.username, username));
+
+    if (!user)
+      throw new NotFoundException(`User with username #${username} not found`);
 
     return user;
   }

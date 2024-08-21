@@ -14,7 +14,9 @@ import {
 } from './dto';
 import { TemplateExercisesService } from './template-exercises.service';
 import { NumberIdParamDto } from 'src/common/dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('template-exercises')
 @Controller('templates')
 export class TemplateExercisesController {
   constructor(

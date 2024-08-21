@@ -10,7 +10,9 @@ import {
 import { WorkoutSetsService } from './workout-sets.service';
 import { CreateWorkoutSetDto, UpdateWorkoutSetDto } from './dto';
 import { NumberIdParamDto } from 'src/common/dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('workout-sets')
 @Controller('workouts')
 export class WorkoutSetsController {
   constructor(private readonly workoutSetsService: WorkoutSetsService) {}

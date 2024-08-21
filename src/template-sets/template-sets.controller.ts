@@ -10,7 +10,9 @@ import {
 import { TemplateSetsService } from './template-sets.service';
 import { NumberIdParamDto } from 'src/common/dto';
 import { CreateTemplateSetDto, UpdateTemplateSetDto } from './dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('template-sets')
 @Controller('templates')
 export class TemplateSetsController {
   constructor(private readonly templateSetsService: TemplateSetsService) {}

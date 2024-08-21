@@ -69,7 +69,7 @@ export class AppService {
 
     return 'Deleted all rows';
 
-    // In case I need to drop the tables:
+    // In case I need to drop the tables again:
     /* 
       DROP TABLE IF EXISTS template_set;
       DROP TABLE IF EXISTS workout_set;

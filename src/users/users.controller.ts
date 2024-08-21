@@ -9,8 +9,10 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { UsersService } from './users.service';
-import { NumberIdParamDto } from 'src/common/dto';
+import { NumberIdParamDto, StringUsernameParamDto } from 'src/common/dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -21,8 +23,13 @@ export class UsersController {
   }
 
   @Get(':id')
-  find(@Param() { id }: NumberIdParamDto) {
-    return this.usersService.find(id);
+  findById(@Param() { id }: NumberIdParamDto) {
+    return this.usersService.findById(id);
+  }
+
+  @Get(':username')
+  findByUsername(@Param() { username }: StringUsernameParamDto) {
+    return this.usersService.findByUsername(username);
   }
 
   @Patch(':id')
