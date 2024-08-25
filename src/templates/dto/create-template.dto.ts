@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateTemplateDto {
   @IsString()
@@ -10,8 +10,4 @@ export class CreateTemplateDto {
   @IsString()
   @ApiPropertyOptional()
   readonly description?: string;
-
-  @IsNumber()
-  @ApiProperty()
-  readonly userId: number;
 }

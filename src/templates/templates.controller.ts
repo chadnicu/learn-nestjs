@@ -10,35 +10,41 @@ import {
 import { TemplatesService } from './templates.service';
 import { CreateTemplateDto, UpdateTemplateDto } from './dto';
 import { NumberIdParamDto } from 'src/common/dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { GetPayload } from 'src/auth/auth.decorator';
 
+@ApiBearerAuth('access-token')
 @ApiTags('templates')
 @Controller('templates')
 export class TemplatesController {
   constructor(private readonly templatesService: TemplatesService) {}
 
   @Post()
-  create(@Body() body: CreateTemplateDto) {
-    return this.templatesService.create(body);
+  create(@GetPayload('sub') userId: number, @Body() body: CreateTemplateDto) {
+    return this.templatesService.create({ ...body, userId });
   }
 
-  @Get(':id')
-  find(@Param() { id }: NumberIdParamDto) {
-    return this.templatesService.find(id);
-  }
-
-  @Get('user/:id')
-  findAllByUser(@Param() { id: userId }: NumberIdParamDto) {
+  @Get()
+  findAllByUser(@GetPayload('sub') userId: number) {
     return this.templatesService.findAllByUser(userId);
   }
 
+  @Get(':id')
+  find(@GetPayload('sub') userId: number, @Param() { id }: NumberIdParamDto) {
+    return this.templatesService.find(id, userId);
+  }
+
   @Patch(':id')
-  update(@Param() { id }: NumberIdParamDto, @Body() body: UpdateTemplateDto) {
-    return this.templatesService.update(id, body);
+  update(
+    @GetPayload('sub') userId: number,
+    @Param() { id }: NumberIdParamDto,
+    @Body() body: UpdateTemplateDto,
+  ) {
+    return this.templatesService.update(id, { ...body, userId });
   }
 
   @Delete(':id')
-  delete(@Param() { id }: NumberIdParamDto) {
-    return this.templatesService.delete(id);
+  delete(@GetPayload('sub') userId: number, @Param() { id }: NumberIdParamDto) {
+    return this.templatesService.delete(id, userId);
   }
 }

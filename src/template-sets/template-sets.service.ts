@@ -1,53 +1,138 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTemplateSetDto, UpdateTemplateSetDto } from './dto';
 import { Database, DrizzleAsyncProvider } from 'src/db/db.module';
-import { templateSetTable } from 'src/db/schema';
-import { eq } from 'drizzle-orm';
+import {
+  exerciseTable,
+  templateExerciseTable,
+  templateSetTable,
+  templateTable,
+} from 'src/db/schema';
+import { and, eq } from 'drizzle-orm';
+import { TemplateExercisesService } from 'src/template-exercises/template-exercises.service';
+import { excludeInternalFields } from 'src/common/utils/exclude-fields.util';
 
 @Injectable()
 export class TemplateSetsService {
-  constructor(@Inject(DrizzleAsyncProvider) private db: Database) {}
+  constructor(
+    @Inject(DrizzleAsyncProvider) private db: Database,
+    private templateExercisesService: TemplateExercisesService,
+  ) {}
 
-  async create(body: CreateTemplateSetDto & { templateExerciseId: number }) {
+  async create(
+    data: CreateTemplateSetDto & { templateExerciseId: number; userId: number },
+  ) {
+    const { userId, ...values } = data;
+
+    // check if it belongs to user
+    await this.templateExercisesService.findOne(
+      data.templateExerciseId,
+      userId,
+    );
+
     const [created] = await this.db
       .insert(templateSetTable)
-      .values(body)
+      .values(values)
       .returning();
 
     return created;
   }
 
-  // not sure if I'll ever need to find just one
-  findAllByTemplateExerciseId(templateExerciseId: number) {
-    const sets = this.db
-      .select()
+  async findAllByTemplateExerciseId(
+    templateExerciseId: number,
+    userId: number,
+  ) {
+    const sets = await this.db
+      .select(excludeInternalFields(templateSetTable))
       .from(templateSetTable)
-      .where(eq(templateSetTable.templateExerciseId, templateExerciseId));
+      .innerJoin(
+        templateExerciseTable,
+        eq(templateSetTable.templateExerciseId, templateExerciseTable.id),
+      )
+      .innerJoin(
+        templateTable,
+        eq(templateExerciseTable.templateId, templateTable.id),
+      )
+      .innerJoin(
+        exerciseTable,
+        eq(templateExerciseTable.exerciseId, exerciseTable.id),
+      )
+      .where(
+        and(
+          eq(templateSetTable.templateExerciseId, templateExerciseId),
+          eq(templateExerciseTable.id, templateExerciseId),
+          eq(templateTable.userId, userId),
+          eq(exerciseTable.userId, userId),
+        ),
+      );
 
     return sets;
   }
 
-  async update(id: number, data: UpdateTemplateSetDto) {
+  async findOne(id: number, userId: number) {
+    const [found] = await this.db
+      .select(excludeInternalFields(templateSetTable))
+      .from(templateSetTable)
+      .innerJoin(
+        templateExerciseTable,
+        eq(templateSetTable.templateExerciseId, templateExerciseTable.id),
+      )
+      .innerJoin(
+        exerciseTable,
+        eq(templateExerciseTable.exerciseId, exerciseTable.id),
+      )
+      .innerJoin(
+        templateTable,
+        eq(templateExerciseTable.templateId, templateTable.id),
+      )
+      .where(
+        and(
+          eq(templateSetTable.id, id),
+          eq(templateTable.userId, userId),
+          eq(exerciseTable.userId, userId),
+        ),
+      );
+
+    if (!found)
+      throw new NotFoundException(
+        `Template_Set with id #${id} not found or not accessible`,
+      );
+
+    return found;
+  }
+
+  async update(id: number, data: UpdateTemplateSetDto & { userId: number }) {
+    const { userId, ...values } = data;
+
+    // check if it belongs to user
+    await this.findOne(id, userId);
+
     const [updated] = await this.db
       .update(templateSetTable)
-      .set({ templateExerciseId: undefined, ...data })
+      .set({ ...values, templateExerciseId: undefined })
       .where(eq(templateSetTable.id, id))
       .returning();
 
     if (!updated)
-      throw new NotFoundException(`Template_Set with id #${id} not found`);
+      throw new NotFoundException(
+        `Template_Set with id #${id} not found or not accessible`,
+      );
 
     return updated;
   }
 
-  async delete(id: number) {
+  async delete(id: number, userId: number) {
+    // check if it belongs to user
+    await this.findOne(id, userId);
+
     const [deleted] = await this.db
       .delete(templateSetTable)
       .where(eq(templateSetTable.id, id))
       .returning();
 
     if (!deleted)
-      throw new NotFoundException(`Template_Set with id #${id} not found`);
+      throw new NotFoundException(
+        `Template_Set with id #${id} not found or not accessible`,
+      );
 
     return deleted;
   }

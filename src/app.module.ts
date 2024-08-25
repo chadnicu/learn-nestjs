@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, UseGuards } from '@nestjs/common';
 import { ExercisesModule } from './exercises/exercises.module';
 import { WorkoutsModule } from './workouts/workouts.module';
 import { TemplatesModule } from './templates/templates.module';
@@ -12,7 +12,9 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { WorkoutSetsModule } from './workout-sets/workout-sets.module';
 import { TemplateSetsModule } from './template-sets/template-sets.module';
+import { AuthGuard } from './auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Module({
   imports: [
     ConfigModule.forRoot({

@@ -1,7 +1,8 @@
 import { Controller, Delete, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth('access-token')
 @ApiTags('testing')
 @Controller('app')
 export class AppController {

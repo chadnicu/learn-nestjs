@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { Database, DrizzleAsyncProvider } from 'src/db/db.module';
 import { templateTable } from 'src/db/schema';
 import { CreateTemplateDto, UpdateTemplateDto } from './dto';
@@ -8,7 +8,7 @@ import { CreateTemplateDto, UpdateTemplateDto } from './dto';
 export class TemplatesService {
   constructor(@Inject(DrizzleAsyncProvider) private db: Database) {}
 
-  async create(data: CreateTemplateDto) {
+  async create(data: CreateTemplateDto & { userId: number }) {
     const [created] = await this.db
       .insert(templateTable)
       .values(data)
@@ -17,14 +17,16 @@ export class TemplatesService {
     return created;
   }
 
-  async find(id: number) {
+  async find(id: number, userId: number) {
     const [template] = await this.db
       .select()
       .from(templateTable)
-      .where(eq(templateTable.id, id));
+      .where(and(eq(templateTable.id, id), eq(templateTable.userId, userId)));
 
     if (!template)
-      throw new NotFoundException(`Template with id #${id} not found`);
+      throw new NotFoundException(
+        `Template with id #${id} not found or not accessible`,
+      );
 
     return template;
   }
@@ -38,27 +40,33 @@ export class TemplatesService {
     return templates;
   }
 
-  async update(id: number, data: UpdateTemplateDto) {
+  async update(id: number, data: UpdateTemplateDto & { userId: number }) {
+    const { userId, ...values } = data;
+
     const [updated] = await this.db
       .update(templateTable)
-      .set(data)
-      .where(eq(templateTable.id, id))
+      .set(values)
+      .where(and(eq(templateTable.id, id), eq(templateTable.userId, userId)))
       .returning();
 
     if (!updated)
-      throw new NotFoundException(`Template with id #${id} not found`);
+      throw new NotFoundException(
+        `Template with id #${id} not found or not accessible`,
+      );
 
     return updated;
   }
 
-  async delete(id: number) {
+  async delete(id: number, userId: number) {
     const [deleted] = await this.db
       .delete(templateTable)
-      .where(eq(templateTable.id, id))
+      .where(and(eq(templateTable.id, id), eq(templateTable.userId, userId)))
       .returning();
 
     if (!deleted)
-      throw new NotFoundException(`Template with id #${id} not found`);
+      throw new NotFoundException(
+        `Template with id #${id} not found or not accessible`,
+      );
 
     return deleted;
   }

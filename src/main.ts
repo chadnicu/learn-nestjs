@@ -1,4 +1,4 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { SwaggerTheme, SwaggerThemeNameEnum } from 'swagger-themes';
@@ -6,6 +6,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './global-filters/http-exception.filter';
 import { ConfigService } from '@nestjs/config';
 import { AllExceptionsFilter } from './global-filters/all-exceptions.filter';
+import { AuthGuard } from './auth/auth.guard';
+import { JwtService } from '@nestjs/jwt';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -48,6 +50,10 @@ async function bootstrap() {
     new AllExceptionsFilter(httpAdapterHost, configService),
     new HttpExceptionFilter(configService),
   );
+
+  const reflector = app.get(Reflector);
+  const jwtService = app.get(JwtService);
+  app.useGlobalGuards(new AuthGuard(jwtService, configService, reflector));
 
   await app.listen(3000);
 }

@@ -12,11 +12,12 @@ export class CreateUserDto {
 
   @IsString()
   @ApiProperty()
-  readonly passwordHash: string;
+  readonly password: string;
 
+  @IsOptional()
   @IsString()
-  @ApiProperty()
-  readonly weightUnit: string;
+  @ApiPropertyOptional()
+  readonly weightUnit?: string;
 
   @IsOptional()
   @IsString()

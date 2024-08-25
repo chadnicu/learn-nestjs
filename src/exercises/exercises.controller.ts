@@ -10,35 +10,41 @@ import {
 import { ExercisesService } from './exercises.service';
 import { CreateExerciseDto, UpdateExerciseDto } from './dto';
 import { NumberIdParamDto } from 'src/common/dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { GetPayload } from 'src/auth/auth.decorator';
 
+@ApiBearerAuth('access-token')
 @ApiTags('exercises')
 @Controller('exercises')
 export class ExercisesController {
   constructor(private readonly exercisesService: ExercisesService) {}
 
   @Post()
-  create(@Body() body: CreateExerciseDto) {
-    return this.exercisesService.create(body);
+  create(@GetPayload('sub') userId: number, @Body() body: CreateExerciseDto) {
+    return this.exercisesService.create({ ...body, userId });
   }
 
   @Get(':id')
-  find(@Param() { id }: NumberIdParamDto) {
-    return this.exercisesService.find(id);
+  find(@GetPayload('sub') userId: number, @Param() { id }: NumberIdParamDto) {
+    return this.exercisesService.find(id, userId);
   }
 
-  @Get('user/:id')
-  findAllByUser(@Param() { id: userId }: NumberIdParamDto) {
+  @Get()
+  findAllByUser(@GetPayload('sub') userId: number) {
     return this.exercisesService.findAllByUser(userId);
   }
 
   @Patch(':id')
-  update(@Param() { id }: NumberIdParamDto, @Body() body: UpdateExerciseDto) {
-    return this.exercisesService.update(id, body);
+  update(
+    @GetPayload('sub') userId: number,
+    @Param() { id }: NumberIdParamDto,
+    @Body() body: UpdateExerciseDto,
+  ) {
+    return this.exercisesService.update(id, { ...body, userId });
   }
 
   @Delete(':id')
-  delete(@Param() { id }: NumberIdParamDto) {
-    return this.exercisesService.delete(id);
+  delete(@GetPayload('sub') userId: number, @Param() { id }: NumberIdParamDto) {
+    return this.exercisesService.delete(id, userId);
   }
 }

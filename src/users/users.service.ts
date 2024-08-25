@@ -10,11 +10,13 @@ export class UsersService {
   constructor(@Inject(DrizzleAsyncProvider) private db: Database) {}
 
   async create(data: CreateUserDto) {
-    const hash = await bcrypt.hash(data.passwordHash, 10);
+    const { password, ...values } = data;
+
+    const passwordHash = await bcrypt.hash(password, 10);
 
     const [created] = await this.db
       .insert(userTable)
-      .values({ ...data, passwordHash: hash })
+      .values({ ...values, passwordHash })
       .returning();
 
     return created;
@@ -26,7 +28,10 @@ export class UsersService {
       .from(userTable)
       .where(eq(userTable.id, id));
 
-    if (!user) throw new NotFoundException(`User with id #${id} not found`);
+    if (!user)
+      throw new NotFoundException(
+        `User with id #${id} not found or not accessible`,
+      );
 
     return user;
   }
@@ -38,19 +43,26 @@ export class UsersService {
       .where(eq(userTable.username, username));
 
     if (!user)
-      throw new NotFoundException(`User with username #${username} not found`);
+      throw new NotFoundException(
+        `User with username #${username} not found or not accessible`,
+      );
 
     return user;
   }
 
-  async update(id: number, data: UpdateUserDto) {
+  async update(data: UpdateUserDto & { userId: number }) {
+    const { userId, ...values } = data;
+
     const [updated] = await this.db
       .update(userTable)
-      .set(data)
-      .where(eq(userTable.id, id))
+      .set(values)
+      .where(eq(userTable.id, userId))
       .returning();
 
-    if (!updated) throw new NotFoundException(`User with id #${id} not found`);
+    if (!updated)
+      throw new NotFoundException(
+        `User with id #${userId} not found or not accessible`,
+      );
 
     return updated;
   }
@@ -61,7 +73,10 @@ export class UsersService {
       .where(eq(userTable.id, id))
       .returning();
 
-    if (!deleted) throw new NotFoundException(`User with id #${id} not found`);
+    if (!deleted)
+      throw new NotFoundException(
+        `User with id #${id} not found or not accessible`,
+      );
 
     return deleted;
   }
