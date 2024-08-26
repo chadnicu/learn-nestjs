@@ -12,6 +12,7 @@ export const userTable = sqliteTable('user', {
   username: text('username').notNull().unique(),
   email: text('email').notNull().unique(),
   passwordHash: text('password_hash').notNull(),
+  role: text('role').notNull().default('user'),
   weightUnit: text('weight_unit').notNull().default('kg'),
   firstName: text('first_name'),
   lastName: text('last_name'),

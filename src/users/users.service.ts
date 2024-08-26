@@ -55,7 +55,8 @@ export class UsersService {
 
     const [updated] = await this.db
       .update(userTable)
-      .set(values)
+      // @ts-expect-error this shouldn't error
+      .set({ ...values, updatedAt: new Date().getTime() })
       .where(eq(userTable.id, userId))
       .returning();
 

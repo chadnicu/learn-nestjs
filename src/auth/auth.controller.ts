@@ -15,7 +15,6 @@ import { AllowAnon, GetPayload } from './auth.decorator';
 import { CreateUserDto, UpdateUserDto } from 'src/users/dto';
 import { JwtPayload } from './interface/jwt-payload.interface';
 
-@ApiBearerAuth('access-token')
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
@@ -35,6 +34,7 @@ export class AuthController {
     return this.authService.signUp(data);
   }
 
+  @ApiBearerAuth('access-token')
   @Get('profile')
   async getProfile(@GetPayload() payload: JwtPayload) {
     return {
@@ -43,6 +43,7 @@ export class AuthController {
     };
   }
 
+  @ApiBearerAuth('access-token')
   @Patch('profile')
   async updateProfile(
     @GetPayload() payload: JwtPayload,
@@ -55,6 +56,7 @@ export class AuthController {
     return { payload, ...profile };
   }
 
+  @ApiBearerAuth('access-token')
   @Delete('profile')
   deleteProfile(@GetPayload('sub') userId: number) {
     return this.authService.deleteProfile(userId);

@@ -36,9 +36,5 @@ export class CreateUserDto {
 
   @IsNumber()
   @IsOptional()
-  readonly createdAt: number;
-
-  @IsNumber()
-  @IsOptional()
-  readonly updatedAt: number;
+  readonly createdAt?: number;
 }
