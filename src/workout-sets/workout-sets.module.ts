@@ -7,5 +7,6 @@ import { WorkoutExercisesModule } from 'src/workout-exercises/workout-exercises.
   imports: [WorkoutExercisesModule],
   providers: [WorkoutSetsService],
   controllers: [WorkoutSetsController],
+  exports: [WorkoutSetsService],
 })
 export class WorkoutSetsModule {}

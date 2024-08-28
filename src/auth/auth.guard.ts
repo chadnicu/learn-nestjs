@@ -1,6 +1,7 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -8,7 +9,9 @@ import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { IS_PUBLIC_KEY } from './auth.decorator';
+import { IS_PUBLIC_KEY, ROLES_KEY } from './auth.decorator';
+import { UsersService } from 'src/users/users.service';
+import { JwtPayload } from './interface/jwt-payload.interface';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -16,6 +19,7 @@ export class AuthGuard implements CanActivate {
     private jwtService: JwtService,
     private configService: ConfigService,
     private reflector: Reflector,
+    private usersService: UsersService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -30,11 +34,28 @@ export class AuthGuard implements CanActivate {
     if (!token) throw new UnauthorizedException();
 
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
+      const payload: JwtPayload = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get<string>('JWT_SECRET'),
       });
       request['user'] = payload;
-    } catch {
+
+      const roles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
+        context.getHandler(),
+        context.getClass(),
+      ]);
+
+      if (roles && roles.length > 0) {
+        const userRole = await this.usersService.findById(payload.sub);
+
+        if (!roles.includes(userRole.role)) {
+          throw new ForbiddenException(
+            'You do not have permission to access this resource',
+          );
+        }
+      }
+    } catch (err) {
+      if (err instanceof ForbiddenException) throw err;
+
       throw new UnauthorizedException();
     }
 

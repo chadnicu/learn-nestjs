@@ -7,6 +7,6 @@ import { TemplateExercisesModule } from 'src/template-exercises/template-exercis
   imports: [TemplateExercisesModule],
   providers: [TemplateSetsService],
   controllers: [TemplateSetsController],
-  exports: [],
+  exports: [TemplateSetsService],
 })
 export class TemplateSetsModule {}
