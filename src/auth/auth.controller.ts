@@ -12,7 +12,7 @@ import { AuthService } from './auth.service';
 import { SignInDto } from './dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AllowAnon, GetPayload } from './auth.decorator';
-import { CreateUserDto, UpdateUserDto } from 'src/users/dto';
+import { CreateUserDto, UpdateUserDto } from '../users/dto';
 import { JwtPayload } from './interface/jwt-payload.interface';
 
 @ApiTags('auth')
