@@ -13,7 +13,7 @@ import {
   UpdateTemplateExerciseDto,
 } from './dto';
 import { TemplateExercisesService } from './template-exercises.service';
-import { NumberIdParamDto } from 'src/common/dto';
+import { NumberIdParamDto } from '../common/dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GetPayload } from 'src/auth/auth.decorator';
 

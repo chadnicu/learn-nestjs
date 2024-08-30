@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { WorkoutSetsService } from './workout-sets.service';
 import { CreateWorkoutSetDto, UpdateWorkoutSetDto } from './dto';
-import { NumberIdParamDto } from 'src/common/dto';
+import { NumberIdParamDto } from '../common/dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GetPayload } from 'src/auth/auth.decorator';
 

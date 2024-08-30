@@ -8,7 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { TemplateSetsService } from './template-sets.service';
-import { NumberIdParamDto } from 'src/common/dto';
+import { NumberIdParamDto } from '../common/dto';
 import { CreateTemplateSetDto, UpdateTemplateSetDto } from './dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GetPayload } from 'src/auth/auth.decorator';
