@@ -1,15 +1,15 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTemplateSetDto, UpdateTemplateSetDto } from './dto';
-import { Database, DrizzleAsyncProvider } from 'src/db/db.module';
+import { Database, DrizzleAsyncProvider } from '../db/db.module';
 import {
   exerciseTable,
   templateExerciseTable,
   templateSetTable,
   templateTable,
-} from 'src/db/schema';
+} from '../db/schema';
 import { and, eq } from 'drizzle-orm';
-import { TemplateExercisesService } from 'src/template-exercises/template-exercises.service';
-import { excludeInternalFields } from 'src/common/utils/exclude-fields.util';
+import { TemplateExercisesService } from '../template-exercises/template-exercises.service';
+import { excludeInternalFields } from '../common/utils/exclude-fields.util';
 
 @Injectable()
 export class TemplateSetsService {

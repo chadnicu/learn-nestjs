@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, eq } from 'drizzle-orm';
-import { Database, DrizzleAsyncProvider } from 'src/db/db.module';
-import { workoutTable } from 'src/db/schema';
+import { Database, DrizzleAsyncProvider } from '../db/db.module';
+import { workoutTable } from '../db/schema';
 import { CreateWorkoutDto, UpdateWorkoutDto } from './dto';
 
 @Injectable()

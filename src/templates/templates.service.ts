@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { and, eq } from 'drizzle-orm';
-import { Database, DrizzleAsyncProvider } from 'src/db/db.module';
-import { templateTable } from 'src/db/schema';
+import { Database, DrizzleAsyncProvider } from '../db/db.module';
+import { templateTable } from '../db/schema';
 import { CreateTemplateDto, UpdateTemplateDto } from './dto';
 
 @Injectable()

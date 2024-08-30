@@ -1,6 +1,6 @@
 import { SetMetadata } from '@nestjs/common';
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { JwtPayload } from 'src/auth/interface/jwt-payload.interface';
+import { JwtPayload } from '../auth/interface/jwt-payload.interface';
 
 export const IS_PUBLIC_KEY = 'isPublic';
 export const AllowAnon = () => SetMetadata(IS_PUBLIC_KEY, true);

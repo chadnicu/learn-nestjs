@@ -1,15 +1,15 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { Database, DrizzleAsyncProvider } from 'src/db/db.module';
+import { Database, DrizzleAsyncProvider } from '../db/db.module';
 import { CreateWorkoutSetDto, UpdateWorkoutSetDto } from './dto';
 import {
   exerciseTable,
   workoutExerciseTable,
   workoutSetTable,
   workoutTable,
-} from 'src/db/schema';
+} from '../db/schema';
 import { and, eq } from 'drizzle-orm';
-import { WorkoutExercisesService } from 'src/workout-exercises/workout-exercises.service';
-import { excludeInternalFields } from 'src/common/utils/exclude-fields.util';
+import { WorkoutExercisesService } from '../workout-exercises/workout-exercises.service';
+import { excludeInternalFields } from '../common/utils/exclude-fields.util';
 
 @Injectable()
 export class WorkoutSetsService {

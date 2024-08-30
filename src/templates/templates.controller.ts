@@ -11,7 +11,7 @@ import { TemplatesService } from './templates.service';
 import { CreateTemplateDto, UpdateTemplateDto } from './dto';
 import { NumberIdParamDto } from '../common/dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { GetPayload } from 'src/auth/auth.decorator';
+import { GetPayload } from '../auth/auth.decorator';
 
 @ApiBearerAuth('access-token')
 @ApiTags('templates')
